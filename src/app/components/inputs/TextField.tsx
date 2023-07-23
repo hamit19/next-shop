@@ -6,6 +6,7 @@ interface TextFiledProps {
   id: string;
   placeholder?: string;
   type: string;
+  onChange?: React.ChangeEventHandler<HTMLInputElement>;
 }
 
 const TextField: React.FC<TextFiledProps> = ({
@@ -14,6 +15,7 @@ const TextField: React.FC<TextFiledProps> = ({
   id,
   placeholder,
   type,
+  onChange,
 }) => {
   return (
     <div className='relative flex flex-col w-full gap-2 '>
@@ -39,6 +41,7 @@ const TextField: React.FC<TextFiledProps> = ({
         type={type}
         placeholder={placeholder}
         id={id}
+        onChange={onChange}
       />
     </div>
   );

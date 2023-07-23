@@ -1,9 +1,7 @@
 "use client";
 
-// type buttonType =
-
 interface ButtonProps {
-  action?: () => void;
+  action?: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
   label: string;
   loading?: boolean;
   icon?: string;
@@ -41,7 +39,7 @@ const Button: React.FC<ButtonProps> = ({
         items-center
         justify-center
       `}
-      onClick={() => action}
+      onClick={action}
       disabled={loading}
     >
       {label}
