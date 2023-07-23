@@ -7,6 +7,8 @@ interface TextFiledProps {
   placeholder?: string;
   type: string;
   onChange?: React.ChangeEventHandler<HTMLInputElement>;
+  center?: boolean;
+  ref?: React.LegacyRef<HTMLInputElement>;
 }
 
 const TextField: React.FC<TextFiledProps> = ({
@@ -16,14 +18,17 @@ const TextField: React.FC<TextFiledProps> = ({
   placeholder,
   type,
   onChange,
+  center,
+  ref,
 }) => {
   return (
     <div className='relative flex flex-col w-full gap-2 '>
-      <label className='pb-1 text-sm text-secondary-500' htmlFor={id}>
+      <label className='pb-1 text-sm text-secondary-600' htmlFor={id}>
         {label}
       </label>
       <input
         className={`
+        appearance-none
         border
         border-white
         rounded-2xl
@@ -36,12 +41,14 @@ const TextField: React.FC<TextFiledProps> = ({
         text-secondary-800
         outline-none
         bg-slate-100/90
+        ${center && "text-center"}
       `}
         name={name}
         type={type}
         placeholder={placeholder}
         id={id}
         onChange={onChange}
+        ref={ref}
       />
     </div>
   );
