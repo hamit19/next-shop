@@ -4,6 +4,8 @@ import Image from "next/image";
 import { useCallback, useRef, useState } from "react";
 import CustomForm from "./CustomForm";
 import TextField from "../components/inputs/TextField";
+import BackArrow from "../svgs/icons/BackArrow";
+import Edit from "../svgs/icons/Edit";
 
 enum STEPS {
   ENTER_INFO = 0,
@@ -180,9 +182,9 @@ const AuthClient = () => {
           {step !== STEPS.ENTER_INFO && (
             <div
               onClick={back}
-              className='absolute px-2 py-[1px] cursor-pointer rounded-sm left-5 top-5 bg-secondary-50/50'
+              className='absolute rounded-sm cursor-pointer left-5 top-5'
             >
-              x
+              <BackArrow className='transition stroke-primary-900 hover:stroke-primary-700' />
             </div>
           )}
           {step === STEPS.ENTER_INFO ? (
@@ -199,6 +201,8 @@ const AuthClient = () => {
               formBody={FormBody}
               small
               handleSubmit={handleSubmitVerificationCode}
+              icon={Edit}
+              action={back}
             />
           )}
         </div>
