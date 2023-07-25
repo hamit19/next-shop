@@ -1,7 +1,7 @@
 "use client";
 import authSvg from "@/app/svgs/auth.svg";
 import Image from "next/image";
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useState } from "react";
 import CustomForm from "./CustomForm";
 import TextField from "../components/inputs/TextField";
 import BackArrow from "../svgs/icons/BackArrow";
@@ -40,9 +40,7 @@ const AuthClient = () => {
     initialVerificationCodeState
   );
 
-  const inputRefs = useRef<HTMLInputElement[]>([]);
-
-  console.log(inputRefs);
+  const inputRefs: HTMLInputElement[] = [];
 
   const handleSubmitInfo = useCallback(
     (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
@@ -93,6 +91,41 @@ const AuthClient = () => {
     [verificationCode]
   );
 
+  // useEffect(() => {
+  //   inputRefs?.forEach((input) => {
+  //     if (input.id === "digit1") {
+  //       if (input.value.length < 1) {
+  //         input.focus();
+  //       }
+  //     }
+
+  //     input.addEventListener("keydown", (e) => {
+  //       const num = Number(e.key);
+  //       if (num && num >= 0 && num <= 9) {
+  //         // Only allow numbers
+  //         if (input.value.length >= input.maxLength) {
+  //           e.preventDefault();
+  //           focusNext();
+  //         }
+  //       }
+  //     });
+  //   });
+  // }, []);
+
+  // function focusNext() {
+  //   if (inputRefs) {
+  //     const currInput: any = document.activeElement;
+
+  //     const currInputIndex: any = inputRefs?.indexOf(currInput);
+
+  //     const nextInputIndex: number = (currInputIndex + 1) % inputRefs.length;
+
+  //     const input = inputRefs?.[nextInputIndex];
+
+  //     input.focus();
+  //   }
+  // }
+
   if (step === STEPS.ENTER_INFO) {
     FormBody = (
       <TextField
@@ -101,6 +134,7 @@ const AuthClient = () => {
         type='string'
         label='Please enter your phone number or email'
         onChange={getInfoHandler}
+        value={inputValue}
       />
     );
   }
@@ -113,51 +147,75 @@ const AuthClient = () => {
         </h5>
         <div className='grid grid-cols-6 gap-1 '>
           <TextField
+            key={"digit1"}
             onChange={getVerificationCodeHandler}
             center
             name='digit1'
             id='digit1'
             type='number'
+            inputRefs={inputRefs}
+            maxLength={1}
+            // value={verificationCode.digit1}
           />
 
           <TextField
+            key={"digit2"}
             onChange={getVerificationCodeHandler}
             center
             name='digit2'
             id='digit2'
             type='number'
+            inputRefs={inputRefs}
+            maxLength={1}
+            // value={verificationCode.digit2}
           />
 
           <TextField
+            key={"digit3"}
             onChange={getVerificationCodeHandler}
             center
             name='digit3'
             id='digit3'
             type='number'
+            inputRefs={inputRefs}
+            maxLength={1}
+            // value={verificationCode.digit3}
           />
 
           <TextField
+            key={"digit4"}
             onChange={getVerificationCodeHandler}
             center
             name='digit4'
             id='digit4'
             type='number'
+            inputRefs={inputRefs}
+            maxLength={1}
+            // value={verificationCode.digit4}
           />
 
           <TextField
+            key={"digit5"}
             onChange={getVerificationCodeHandler}
             center
             name='digit5'
             id='digit5'
             type='number'
+            inputRefs={inputRefs}
+            maxLength={1}
+            // value={verificationCode.digit5}
           />
 
           <TextField
+            key={"digit6"}
             onChange={getVerificationCodeHandler}
             center
             name='digit6'
             id='digit6'
             type='number'
+            inputRefs={inputRefs}
+            maxLength={1}
+            // value={verificationCode.digit6}
           />
         </div>
       </div>

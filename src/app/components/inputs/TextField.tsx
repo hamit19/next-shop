@@ -1,5 +1,7 @@
 "use client";
 
+import { useCallback, useEffect, useRef } from "react";
+
 interface TextFiledProps {
   label?: string;
   name: string;
@@ -8,7 +10,9 @@ interface TextFiledProps {
   type: string;
   onChange?: React.ChangeEventHandler<HTMLInputElement>;
   center?: boolean;
-  ref?: React.LegacyRef<HTMLInputElement>;
+  inputRefs?: HTMLInputElement[];
+  value?: string | number;
+  maxLength?: number;
 }
 
 const TextField: React.FC<TextFiledProps> = ({
@@ -19,8 +23,18 @@ const TextField: React.FC<TextFiledProps> = ({
   type,
   onChange,
   center,
-  ref,
+  inputRefs,
+  value,
+  maxLength,
 }) => {
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (inputRef.current?.id.includes("digit")) {
+      inputRefs?.push(inputRef.current);
+    }
+  }, [inputRefs]);
+
   return (
     <div className='relative flex flex-col w-full gap-2 '>
       <label className='pb-1 text-sm text-secondary-600' htmlFor={id}>
@@ -48,7 +62,9 @@ const TextField: React.FC<TextFiledProps> = ({
         placeholder={placeholder}
         id={id}
         onChange={onChange}
-        ref={ref}
+        ref={inputRef}
+        value={value}
+        maxLength={maxLength}
       />
     </div>
   );
