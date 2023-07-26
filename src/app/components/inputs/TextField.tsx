@@ -42,19 +42,7 @@ const TextField: React.FC<TextFiledProps> = ({
       </label>
       <input
         className={`
-        appearance-none
-        border
-        border-white
-        rounded-2xl
-        hover:border-primary-300
-        focus:border-primary-400
-        focus:shadow-xl
-        focus:bg-white
-        transition
-        p-4
-        text-secondary-800
-        outline-none
-        bg-slate-100/90
+        textField__input
         ${center && "text-center"}
       `}
         name={name}

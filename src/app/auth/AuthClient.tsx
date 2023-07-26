@@ -12,7 +12,7 @@ enum STEPS {
   VERIFY = 1,
 }
 
-type verificationCodeType = {
+type OTPType = {
   digit1: number;
   digit2: number;
   digit3: number;
@@ -21,7 +21,7 @@ type verificationCodeType = {
   digit6: number;
 };
 
-const initialVerificationCodeState = {
+const initialOTPState = {
   digit1: 0,
   digit2: 0,
   digit3: 0,
@@ -33,12 +33,11 @@ const initialVerificationCodeState = {
 // todo ==> the auto focus on inputs should be handled!
 
 const AuthClient = () => {
-  let FormBody: any;
   const [step, setStep] = useState(STEPS.ENTER_INFO);
-  const [inputValue, setInputValue] = useState("");
-  const [verificationCode, setVerificationCode] = useState(
-    initialVerificationCodeState
-  );
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [OTP, setOTP] = useState(initialOTPState);
+
+  let FormBody: any;
 
   const inputRefs: HTMLInputElement[] = [];
 
@@ -46,7 +45,7 @@ const AuthClient = () => {
     (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
       e.preventDefault();
 
-      // todo () ==> axios.post('localhost/api/opt',{...inputValue} )
+      // todo () ==> axios.post('localhost/api/opt',{...PhoneNumber} )
 
       setStep(STEPS.VERIFY);
     },
@@ -55,19 +54,19 @@ const AuthClient = () => {
 
   const getInfoHandler = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
-      setInputValue(e.target.value);
+      setPhoneNumber(e.target.value);
     },
     []
   );
 
-  const getVerificationCodeHandler = useCallback(
+  const getOTPHandler = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
-      setVerificationCode({
-        ...verificationCode,
+      setOTP({
+        ...OTP,
         [e.target.name]: e.target.value,
-      } as Pick<verificationCodeType, keyof verificationCodeType>);
+      } as Pick<OTPType, keyof OTPType>);
     },
-    [verificationCode]
+    [OTP]
   );
 
   const back = useCallback(() => {
@@ -76,19 +75,21 @@ const AuthClient = () => {
     setStep(step - 1);
   }, [step]);
 
-  const handleSubmitVerificationCode = useCallback(
+  const handleSubmitOTP = useCallback(
     (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
       e.preventDefault();
 
-      const keys = Object.keys(verificationCode);
+      const keys = Object.keys(OTP);
       //@ts-ignore
-      const codesArray = keys.map((key) => verificationCode[key]);
+      const codesArray = keys.map((key) => OTP[key]);
 
-      let code = codesArray.join("");
+      let finalOTP = codesArray.join("");
+
+      console.log(finalOTP, phoneNumber, "yep");
 
       // todo ==> axios.post(`localhost:5000/api/topCheck`, {...code})
     },
-    [verificationCode]
+    [OTP, phoneNumber]
   );
 
   // useEffect(() => {
@@ -134,7 +135,7 @@ const AuthClient = () => {
         type='string'
         label='Please enter your phone number or email'
         onChange={getInfoHandler}
-        value={inputValue}
+        value={phoneNumber}
       />
     );
   }
@@ -148,7 +149,7 @@ const AuthClient = () => {
         <div className='grid grid-cols-6 gap-1 '>
           <TextField
             key={"digit1"}
-            onChange={getVerificationCodeHandler}
+            onChange={getOTPHandler}
             center
             name='digit1'
             id='digit1'
@@ -160,7 +161,7 @@ const AuthClient = () => {
 
           <TextField
             key={"digit2"}
-            onChange={getVerificationCodeHandler}
+            onChange={getOTPHandler}
             center
             name='digit2'
             id='digit2'
@@ -172,7 +173,7 @@ const AuthClient = () => {
 
           <TextField
             key={"digit3"}
-            onChange={getVerificationCodeHandler}
+            onChange={getOTPHandler}
             center
             name='digit3'
             id='digit3'
@@ -184,7 +185,7 @@ const AuthClient = () => {
 
           <TextField
             key={"digit4"}
-            onChange={getVerificationCodeHandler}
+            onChange={getOTPHandler}
             center
             name='digit4'
             id='digit4'
@@ -196,7 +197,7 @@ const AuthClient = () => {
 
           <TextField
             key={"digit5"}
-            onChange={getVerificationCodeHandler}
+            onChange={getOTPHandler}
             center
             name='digit5'
             id='digit5'
@@ -208,7 +209,7 @@ const AuthClient = () => {
 
           <TextField
             key={"digit6"}
-            onChange={getVerificationCodeHandler}
+            onChange={getOTPHandler}
             center
             name='digit6'
             id='digit6'
@@ -225,7 +226,7 @@ const AuthClient = () => {
   return (
     <div className='absolute inset-0 bg-slate-100'>
       <div className='grid grid-cols-1 lg:grid-cols-8 '>
-        <div className='hidden h-[100vh] rounded-r-[80px] lg:flex  lg:items-center lg:justify-center col-span-5 bg-primary-900'>
+        <div className='hidden h-[100vh] rounded-r-[80px] lg:flex lg:items-center lg:justify-center col-span-5 bg-primary-900'>
           <div className='w-[500px] h-[500px] relative'>
             <Image
               fill
@@ -258,7 +259,7 @@ const AuthClient = () => {
               subtitle={`Verification code has sent to ${"09014693924"} `}
               formBody={FormBody}
               small
-              handleSubmit={handleSubmitVerificationCode}
+              handleSubmit={handleSubmitOTP}
               icon={Edit}
               action={back}
             />

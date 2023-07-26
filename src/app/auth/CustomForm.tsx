@@ -1,27 +1,24 @@
 "use client";
 
-import { Icon } from "next/dist/lib/metadata/types/metadata-types";
 import Button from "../components/Button";
-import TextField from "../components/inputs/TextField";
-import { ReactSVGElement } from "react";
 
 interface CustomFormProps {
   title?: string;
-  handleSubmit?: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
   subtitle?: string;
-  formBody?: any;
   small?: boolean;
+  formBody?: any;
   icon?: any;
+  handleSubmit?: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
   action?: () => void;
 }
 
 const CustomForm: React.FC<CustomFormProps> = ({
   title,
-  handleSubmit,
   subtitle,
   formBody,
   small,
   icon: Icon,
+  handleSubmit,
   action,
 }) => {
   return (

@@ -52,6 +52,10 @@ module.exports = {
       container: {
         center: true,
       },
+
+      boxShadow: {
+        "input-focus": "0px 12px 24px -8px rgb(var(--color-primary-300))",
+      },
     },
   },
   plugins: [],

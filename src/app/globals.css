@@ -42,6 +42,24 @@
   }
 }
 
+@layer components {
+  .textField__input {
+    @apply appearance-none
+    border
+    border-white
+    rounded-2xl
+    hover:border-primary-300
+    focus:border-primary-400
+    focus:shadow-input-focus
+    focus:bg-white
+    transition
+    p-4
+    text-secondary-800
+    outline-none
+    bg-slate-100/90;
+  }
+}
+
 html,
 body {
   padding: 0;
