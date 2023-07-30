@@ -37,7 +37,7 @@ const initialOTPState = {
 // todo ==> replace the OTP phone number verification with email verification OTP!
 
 const AuthClient = () => {
-  const [step, setStep] = useState(STEPS.ENTER_INFO);
+  const [step, setStep] = useState(STEPS.VERIFY);
   const [email, setEmail] = useState("");
   const [OTP, setOTP] = useState(initialOTPState);
   const [loading, setLoading] = useState(false);
@@ -57,8 +57,8 @@ const AuthClient = () => {
         });
         toast.success(data.message);
         setStep(STEPS.VERIFY);
-      } catch (err) {
-        console.log(err, "this is error!");
+      } catch (err: any) {
+        toast.error("Something went wrang, please try again!");
       }
 
       setLoading(false);
@@ -90,18 +90,33 @@ const AuthClient = () => {
   }, [step]);
 
   const handleSubmitOTP = useCallback(
-    (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
       e.preventDefault();
 
-      const keys = Object.keys(OTP);
-      //@ts-ignore
-      const codesArray = keys.map((key) => OTP[key]);
+      setLoading(true);
 
-      let finalOTP = codesArray.join("");
+      try {
+        const keys = Object.keys(OTP);
+        //@ts-ignore
+        const codesArray = keys.map((key) => OTP[key]);
 
-      console.log(finalOTP, email, "yep");
+        let finalOTP = codesArray.join("");
 
-      // todo ==> axios.post(`localhost:5000/api/topCheck`, {...code})
+        const { data } = await http.post(`/user/check-otp`, {
+          email,
+          otp: finalOTP,
+        });
+
+        toast.success(data.data.message, {
+          style: {
+            fontSize: ".9rem",
+          },
+        });
+      } catch (err: any) {
+        toast.error(err.response.data.message);
+      }
+
+      setLoading(false);
     },
     [OTP, email]
   );
