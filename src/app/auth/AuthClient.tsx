@@ -1,11 +1,13 @@
 "use client";
 import authSvg from "@/app/svgs/auth.svg";
 import Image from "next/image";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import CustomForm from "./CustomForm";
 import TextField from "../components/inputs/TextField";
 import BackArrow from "../svgs/icons/BackArrow";
 import Edit from "../svgs/icons/Edit";
+import http from "../services/httpService";
+import { toast } from "react-hot-toast";
 
 enum STEPS {
   ENTER_INFO = 0,
@@ -32,29 +34,41 @@ const initialOTPState = {
 
 // todo ==> the auto focus on inputs should be handled!
 
+// todo ==> replace the OTP phone number verification with email verification OTP!
+
 const AuthClient = () => {
   const [step, setStep] = useState(STEPS.ENTER_INFO);
-  const [phoneNumber, setPhoneNumber] = useState("");
+  const [email, setEmail] = useState("");
   const [OTP, setOTP] = useState(initialOTPState);
+  const [loading, setLoading] = useState(false);
 
   let FormBody: any;
 
   const inputRefs: HTMLInputElement[] = [];
 
   const handleSubmitInfo = useCallback(
-    (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
       e.preventDefault();
 
-      // todo () ==> axios.post('localhost/api/opt',{...PhoneNumber} )
+      try {
+        setLoading(true);
+        const { data } = await http.post("/user/get-otp", {
+          email,
+        });
+        toast.success(data.message);
+        setStep(STEPS.VERIFY);
+      } catch (err) {
+        console.log(err, "this is error!");
+      }
 
-      setStep(STEPS.VERIFY);
+      setLoading(false);
     },
-    []
+    [email]
   );
 
   const getInfoHandler = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
-      setPhoneNumber(e.target.value);
+      setEmail(e.target.value);
     },
     []
   );
@@ -85,11 +99,11 @@ const AuthClient = () => {
 
       let finalOTP = codesArray.join("");
 
-      console.log(finalOTP, phoneNumber, "yep");
+      console.log(finalOTP, email, "yep");
 
       // todo ==> axios.post(`localhost:5000/api/topCheck`, {...code})
     },
-    [OTP, phoneNumber]
+    [OTP, email]
   );
 
   // useEffect(() => {
@@ -130,12 +144,12 @@ const AuthClient = () => {
   if (step === STEPS.ENTER_INFO) {
     FormBody = (
       <TextField
-        name='phone'
-        id='phone'
+        name='email'
+        id='email'
         type='string'
-        label='Please enter your phone number or email'
+        label='Please enter your email'
         onChange={getInfoHandler}
-        value={phoneNumber}
+        value={email}
       />
     );
   }
@@ -252,16 +266,18 @@ const AuthClient = () => {
               subtitle='Login | Sign up'
               handleSubmit={handleSubmitInfo}
               formBody={FormBody}
+              loading={loading}
             />
           ) : (
             <CustomForm
               title='Next Shop'
-              subtitle={`Verification code has sent to ${"09014693924"} `}
+              subtitle={`Verification code has sent to ${email} `}
               formBody={FormBody}
               small
               handleSubmit={handleSubmitOTP}
               icon={Edit}
               action={back}
+              loading={loading}
             />
           )}
         </div>
