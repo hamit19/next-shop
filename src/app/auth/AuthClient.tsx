@@ -18,7 +18,7 @@ enum STEPS {
 const RESEND_TIME = 90;
 
 const AuthClient = () => {
-  const [step, setStep] = useState<number>(STEPS.CHECK_OTP);
+  const [step, setStep] = useState<number>(STEPS.SEND_OTP);
   const [OTP, setOTP] = useState("");
   const [email, setEmail] = useState("");
   const [time, setTime] = useState(RESEND_TIME);
