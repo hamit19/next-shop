@@ -2,15 +2,11 @@
 import authSvg from "@/app/svgs/auth.svg";
 import Image from "next/image";
 import { useCallback, useEffect, useState } from "react";
-import CustomForm from "./CustomForm";
-import TextField from "../components/inputs/TextField";
 import BackArrow from "../svgs/icons/BackArrow";
 
-import http from "../services/httpService";
 import { toast } from "react-hot-toast";
 import { useMutation } from "@tanstack/react-query";
 import { checkOTP, getOTP } from "@/app/services/authServices";
-import { convertToString } from "../utils/functions";
 import SendOTPForm from "./SendOTPForm";
 import CheckOTPForm from "./CheckOTPForm";
 
@@ -19,12 +15,19 @@ enum STEPS {
   CHECK_OTP = 1,
 }
 
+const RESEND_TIME = 90;
+
 const AuthClient = () => {
   const [step, setStep] = useState<number>(STEPS.CHECK_OTP);
   const [OTP, setOTP] = useState("");
   const [email, setEmail] = useState("");
+  const [time, setTime] = useState(RESEND_TIME);
 
-  const { isLoading: isLoadingSend, mutateAsync: mutateSendOTP } = useMutation({
+  const {
+    isLoading: isLoadingSend,
+    data: sendOtpResponse,
+    mutateAsync: mutateSendOTP,
+  } = useMutation({
     mutationFn: getOTP,
   });
 
@@ -58,6 +61,8 @@ const AuthClient = () => {
         toast.success(data?.data.message);
 
         setStep(STEPS.CHECK_OTP);
+        setTime(RESEND_TIME);
+        setOTP("");
       } catch (err: any) {
         toast.error(
           email.length >= 0
@@ -107,10 +112,12 @@ const AuthClient = () => {
             isLoading={isLoadingCheck}
             checkOTPHandler={checkOTPHandler}
             getOTPHandler={getOTPHandler}
+            resendOTPHandler={sendOTPHandler}
             back={back}
-            email={email}
+            sendOtpResponse={sendOtpResponse}
             key={"checkOTPForm"}
             otp={OTP}
+            time={time}
           />
         );
 
@@ -118,6 +125,18 @@ const AuthClient = () => {
         return null;
     }
   };
+
+  useEffect(() => {
+    const timer =
+      time > 0 &&
+      setInterval(() => {
+        setTime((t) => t - 1);
+      }, 1000);
+
+    return () => {
+      if (timer) clearInterval(timer);
+    };
+  }, [time]);
 
   return (
     <div className='absolute inset-0 bg-slate-100'>

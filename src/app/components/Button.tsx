@@ -8,6 +8,7 @@ interface ButtonProps {
   buttonType: React.ButtonHTMLAttributes<HTMLButtonElement> & {
     type?: "submit" | "reset" | "button" | undefined;
   };
+  disabled?: boolean;
 }
 
 const Button: React.FC<ButtonProps> = ({
@@ -16,13 +17,14 @@ const Button: React.FC<ButtonProps> = ({
   loading,
   icon: Icon,
   buttonType,
+  disabled,
 }) => {
   return (
     <button
       type={buttonType.type || "button"}
       className={`
         bg-primary-900
-      text-white
+        text-white
         font-medium 
         rounded-2xl
         py-4
@@ -38,9 +40,10 @@ const Button: React.FC<ButtonProps> = ({
         gap-4
         items-center
         justify-center
+        w-full
       `}
       onClick={action}
-      disabled={loading}
+      disabled={disabled}
     >
       {label}
 

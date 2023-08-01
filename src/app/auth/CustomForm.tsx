@@ -1,13 +1,11 @@
 "use client";
 
-import { BeatLoader } from "react-spinners";
-import Button from "../components/Button";
-
 interface CustomFormProps {
   title?: string;
   subtitle?: string;
   small?: boolean;
   formBody?: any;
+  formFooter?: any;
   icon?: any;
   loading?: boolean;
   handleSubmit?: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
@@ -20,9 +18,8 @@ const CustomForm: React.FC<CustomFormProps> = ({
   formBody,
   small,
   icon: Icon,
-  handleSubmit,
   action,
-  loading,
+  formFooter,
 }) => {
   return (
     <form className='flex flex-col w-full p-4 sm:max-w-md'>
@@ -30,14 +27,15 @@ const CustomForm: React.FC<CustomFormProps> = ({
         {title}
       </h3>
 
-      <div className='relative flex flex-col justify-center w-full h-full p-4 gap-7 '>
+      <div className='relative flex flex-col justify-center w-full h-full gap-6 p-4 '>
         <h5
           className={`
-             mb-4
-             text-secondary-600
+             mb-1
+             text-secondary-800
              flex flex-row gap-3
              items-center
-            ${small ? "text-sm" : "text-md"}
+             leading-relaxed
+            ${small ? "text-xs" : "text-md"}
         `}
         >
           {subtitle}{" "}
@@ -48,19 +46,12 @@ const CustomForm: React.FC<CustomFormProps> = ({
             />
           )}
         </h5>
+
+        {small && <h5 className='font-bold text-md'>Enter verify code</h5>}
+
         {formBody}
 
-        {loading ? (
-          <div className='flex items-center justify-center w-full py-3 '>
-            <BeatLoader color='#4A6DFF' />
-          </div>
-        ) : (
-          <Button
-            action={handleSubmit}
-            label='Log in'
-            buttonType={{ type: "submit" }}
-          />
-        )}
+        {formFooter}
       </div>
     </form>
   );

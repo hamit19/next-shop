@@ -1,5 +1,7 @@
+import { BeatLoader } from "react-spinners";
 import TextField from "../components/inputs/TextField";
 import CustomForm from "./CustomForm";
+import Button from "../components/Button";
 
 interface SendOTPFormProps {
   emailHandler?: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -25,6 +27,22 @@ const SendOTPForm: React.FC<SendOTPFormProps> = ({
     />
   );
 
+  let formFooter = (
+    <div className=''>
+      {isLoading ? (
+        <div className='flex items-center justify-center w-full py-3 '>
+          <BeatLoader color='#4A6DFF' />
+        </div>
+      ) : (
+        <Button
+          action={sendOTPHandler}
+          label='Submit'
+          buttonType={{ type: "submit" }}
+        />
+      )}
+    </div>
+  );
+
   return (
     <CustomForm
       title='Next Shop'
@@ -32,6 +50,7 @@ const SendOTPForm: React.FC<SendOTPFormProps> = ({
       handleSubmit={sendOTPHandler}
       formBody={FormBody}
       loading={isLoading}
+      formFooter={formFooter}
     />
   );
 };

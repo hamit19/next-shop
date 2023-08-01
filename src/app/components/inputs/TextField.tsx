@@ -24,7 +24,7 @@ const TextField: React.FC<TextFiledProps> = ({
 }) => {
   return (
     <div className='relative flex flex-col w-full gap-2 '>
-      <label className='pb-1 text-sm text-secondary-600' htmlFor={id}>
+      <label className='pb-1 text-sm text-secondary-900' htmlFor={id}>
         {label}
       </label>
       <input
